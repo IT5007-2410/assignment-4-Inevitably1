@@ -11,6 +11,7 @@ import {
     Button,
     useColorScheme,
     View,
+    Alert,
   } from 'react-native';
 
   const dateRegex = new RegExp('^\\d\\d\\d\\d-\\d\\d-\\d\\d');
@@ -52,8 +53,22 @@ class IssueFilter extends React.Component {
       return (
         <>
         {/****** Q1: Start Coding here. ******/}
-        <View>
-          <Text>Issue Filter Placeholder</Text>
+        <View style={styles.filterContainer}>
+          <Text style={styles.filterText}>Issue Filter</Text>
+          <View style={styles.inputContainer}>
+            <TextInput
+              style={styles.filterinput}
+              placeholder="Type here"
+            />
+            <Button
+              title="Apply"
+              onPress={() => {
+                // Dummy onPress function
+                alert('Filter applied (dummy action)');
+              }}
+              color="#007BFF"
+            />
+          </View>
         </View>
         {/****** Q1: Code ends here ******/}
         </>
@@ -62,18 +77,82 @@ class IssueFilter extends React.Component {
 }
 
 const styles = StyleSheet.create({
-    container: { flex: 1, padding: 16, paddingTop: 30, backgroundColor: '#fff' },
-  header: { height: 50, backgroundColor: '#537791' },
-  text: { textAlign: 'center' },
-  dataWrapper: { marginTop: -1 },
-  row: { height: 40, backgroundColor: '#E7E6E1' }
-  });
+  container: {
+    flex: 1,
+    backgroundColor: '#F8F9FA',
+  },
+  filterContainer: {
+    padding: 16,
+    backgroundColor: '#E9ECEF',
+  },
+  filterText: {
+    fontSize: 16,
+    color: '#6C757D',
+  },
+  header: {
+    height: 50,
+    backgroundColor: '#007BFF',
+  },
+  headerText: {
+    color: '#FFF',
+    fontSize: 16,
+    textAlign: 'center',
+  },
+  text: {
+    textAlign: 'center',
+    color: '#343A40',
+  },
+  dataWrapper: {
+    marginTop: -1,
+  },
+  row: {
+    height: 40,
+    backgroundColor: '#F1F3F5',
+  },
+  input: {
+    height: 40,
+    borderColor: '#CED4DA',
+    borderWidth: 1,
+    marginBottom: 10,
+    paddingHorizontal: 10,
+    backgroundColor: '#FFF',
+    borderRadius: 5,
+  },
+  formContainer: {
+    padding: 10,
+    backgroundColor: '#FFF',
+  },
+  filterContainer: {
+    padding: 10,
+    backgroundColor: '#E9ECEF',
+  },
+  filterText: {
+    fontSize: 16,
+    color: '#000000',
+    marginBottom: 10,
+  },
+  inputContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  filterinput: {
+    flex: 1,
+    height: 40,
+    borderColor: '#CED4DA',
+    borderWidth: 1,
+    paddingHorizontal: 10,
+    backgroundColor: '#FFF',
+    borderRadius: 5,
+    marginRight: 10,
+  },
+});
 
-const width= [40,80,80,80,80,80,200];
+const width= [40,80,80,100,60,100,200];
 
 function IssueRow(props) {
     const issue = props.issue;
-    {/****** Q2: Coding Starts here. Create a row of data in a variable******/
+    {/****** Q2: Coding Starts here. Create a row of data in a variable******/}
     const dataRow = [
       issue.id,
       issue.status,
@@ -83,12 +162,12 @@ function IssueRow(props) {
       issue.due ? issue.due.toDateString() : '',
       issue.title,
     ];
-    /****** Q2: Coding Ends here.******/}
+    {/****** Q2: Coding Ends here.******/}
     return (
       <>
-      {/****** Q2: Start Coding here. Add Logic to render a row  ******/
+      {/****** Q2: Start Coding here. Add Logic to render a row  ******/}
       <Row data={dataRow} style={styles.row} textStyle={styles.text} widthArr={width} />
-      /****** Q2: Coding Ends here. ******/}  
+      {/****** Q2: Coding Ends here. ******/}  
       </>
     );
   }
@@ -99,21 +178,27 @@ function IssueRow(props) {
       <IssueRow key={issue.id} issue={issue} />
     );
 
-    {/****** Q2: Start Coding here. Add Logic to initialize table header  ******/
+    {/****** Q2: Start Coding here. Add Logic to initialize table header  ******/}
     const tableHead = ['ID', 'Status', 'Owner', 'Created', 'Effort', 'Due', 'Title'];
-    /****** Q2: Coding Ends here. ******/}
+    {/****** Q2: Coding Ends here. ******/}
     
     
     return (
     <View style={styles.container}>
-    {/****** Q2: Start Coding here to render the table header/rows.**********/
-    <Table borderStyle={{ borderColor: '#C1C0B9' }}>
-      <Row data={tableHead} style={styles.header} textStyle={styles.text} widthArr={width} />
-      <ScrollView style={styles.dataWrapper}>
-        {issueRows}
-      </ScrollView>
-    </Table>
-    /****** Q2: Coding Ends here. ******/}
+    {/****** Q2: Start Coding here to render the table header/rows.**********/}
+    <ScrollView horizontal={true}>
+        <View>
+            <Table borderStyle={{borderColor: '#C1C0B9'}}>
+                <Row data={tableHead} widthArr={width} style={styles.header} textStyle={styles.headerText}/>
+            </Table>
+            <ScrollView style={styles.dataWrapper}>
+                <Table borderStyle={{borderColor: '#C1C0B9'}}>
+                    {issueRows}
+                </Table>
+            </ScrollView>
+        </View>
+    </ScrollView>
+    {/****** Q2: Coding Ends here. ******/}
     </View>
     );
   }
@@ -129,7 +214,6 @@ function IssueRow(props) {
         title: '',
         effort: '',
         status: '',
-        created: '',
         due: '',
       };
       /****** Q3: Code Ends here. ******/
@@ -152,10 +236,6 @@ function IssueRow(props) {
       this.setState({ status });
     }
 
-    setCreated(created) {
-      this.setState({ created });
-    }
-
     setDue(due) {
       this.setState({ due });
     }
@@ -168,59 +248,51 @@ function IssueRow(props) {
         title: this.state.title,
         effort: parseInt(this.state.effort, 10),
         status: this.state.status,
-        created: new Date(this.state.created),
         due: new Date(this.state.due),
       };
       this.props.createIssue(newIssue);
-      this.setState({
-        owner: '',
-        title: '',
-        effort: '',
-        status: '',
-        created: '',
-        due: '',
-      });
       /****** Q3: Code Ends here. ******/
     }
   
     render() {
       return (
-          <View>
+          <View style={styles.formContainer}>
           {/****** Q3: Start Coding here. Create TextInput field, populate state variables. Create a submit button, and on submit, trigger handleSubmit.*******/}
           <TextInput
             placeholder="Status"
             value={this.state.status}
             onChangeText={(text) => this.setStatus(text)}
+            style={styles.input}
           />
           <TextInput
             placeholder="Owner"
             value={this.state.owner}
             onChangeText={(text) => this.setOwner(text)}
-          />
-          <TextInput
-            placeholder="Created Date (YYYY-MM-DD)"
-            value={this.state.created}
-            onChangeText={(text) => this.setCreated(text)}
+            style={styles.input}
           />
           <TextInput
             placeholder="Effort"
             value={this.state.effort}
             onChangeText={(text) => this.setEffort(text)}
             keyboardType="numeric"
+            style={styles.input}
           />
           <TextInput
             placeholder="Due Date (YYYY-MM-DD)"
             value={this.state.due}
             onChangeText={(text) => this.setDue(text)}
+            style={styles.input}
           />
           <TextInput
             placeholder="Title"
             value={this.state.title}
             onChangeText={(text) => this.setTitle(text)}
+            style={styles.input}
           />
           <Button
             onPress={this.handleSubmit}
             title="Add Issue"
+            color="#28A745"
           />
           {/****** Q3: Code Ends here. ******/}
           </View>
@@ -250,22 +322,28 @@ class BlackList extends React.Component {
     const newname = this.state.name;
     console.log(newname);
     const data = await graphQLFetch(query, { newname });
-    this.newnameInput.clear();
+    if (data) {
+      Alert.alert('Name added to blacklist');
+      this.setState({ name: '' });
+      this.props.setCurrentScreen('IssueList');
+    }
     /****** Q4: Code Ends here. ******/
     }
 
     render() {
     return (
-        <View>
+        <View style={styles.formContainer}>
         {/****** Q4: Start Coding here. Create TextInput field, populate state variables. Create a submit button, and on submit, trigger handleSubmit.*******/}
         <TextInput
-        ref={(input) => { this.newnameInput = input; }}
         placeholder="Name To Blacklist"
+        value={this.state.name}
         onChangeText={(newname) => this.setName(newname)}
+        style={styles.input}
         />
         <Button
           onPress={this.handleSubmit}
           title="Add To Blacklist"
+          color="#DC3545"
         />
         {/****** Q4: Code Ends here. ******/}
         </View>
@@ -278,10 +356,17 @@ export default class IssueList extends React.Component {
         super();
         this.state = { issues: [] };
         this.createIssue = this.createIssue.bind(this);
+        this.loadData = this.loadData.bind(this);
     }
     
     componentDidMount() {
     this.loadData();
+    }
+
+    componentDidUpdate(prevProps) {
+      if (prevProps.screen !== this.props.screen && this.props.screen === 'IssueList') {
+        this.loadData();
+      }
     }
 
     async loadData() {
@@ -304,15 +389,35 @@ export default class IssueList extends React.Component {
         id
         }
     }`;
-
+    console.log(issue); 
     const data = await graphQLFetch(query, { issue });
     if (data) {
-        this.loadData();
+      Alert.alert('Issue added successfully');
+      this.setState({
+        owner: '',
+        title: '',
+        effort: '',
+        status: '',
+        due: '',
+      });
+      this.props.setCurrentScreen('IssueList');
     }
     }
     
     
     render() {
+      const currentScreen = this.props.screen || 'IssueList';
+
+      if (currentScreen === 'IssueAdd') {
+        return (
+          <IssueAdd 
+            setCurrentScreen={this.props.setCurrentScreen} 
+            createIssue={this.createIssue} 
+          />
+        );
+      } else if (currentScreen === 'BlackList') {
+        return <BlackList setCurrentScreen={this.props.setCurrentScreen} />;
+      } else {
     return (
     <>
     {/****** Q1: Start Coding here. ******/}
@@ -326,14 +431,13 @@ export default class IssueList extends React.Component {
 
     
     {/****** Q3: Start Coding here. ******/}
-    <IssueAdd createIssue={this.createIssue} />
     {/****** Q3: Code Ends here. ******/}
 
     {/****** Q4: Start Coding here. ******/}
-    <BlackList/>
     {/****** Q4: Code Ends here. ******/}
     </>
       
     );
   }
+}
 }
